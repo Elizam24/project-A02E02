@@ -43,5 +43,31 @@
   backdrop-filter: brightness(1) blur(5px);
 }
 
+/* Estilos para la pantalla de carga */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5em;
+  z-index: 1000; 
+}
+
+.loading-screen::after {
+  content: "Loading...";
+  animation: fade 1.5s infinite;
+}
+
+/* Animación de desvanecimiento */
+@keyframes fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 

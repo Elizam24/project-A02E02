@@ -44,6 +44,7 @@ function App() {
   const [coords, setCoords] = useState(initialState)
   const [weather, setWeather] = useState({})
   const [toggle, setToggle] = useState(false)
+  const [loading, setLoading] = useState(true) // Estado de carga
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -74,9 +75,11 @@ function App() {
             pressure: res.data.main.pressure,
             temperature: parseInt(res.data.main.temp - 273.15)
           })
+          setLoading(false) // Desactivar pantalla de carga una vez que los datos estén disponibles
         })
         .catch((err) => {
           console.log(err)
+          setLoading(false) // Asegurarse de desactivar la carga en caso de error
         })
     }
   }, [coords])
@@ -85,25 +88,32 @@ function App() {
 
   return (
     <div className='card'>
-      <h1 className='card__title'>Weather App</h1>
-      <h2 className='card__subtitle'>
-        {weather.city}, {weather.country}
-      </h2>
-      <div className='card__body'>
-        <img src={weather.icon} alt={weather.main} width={100} />
-        <div className="card__info">
-          <h3 className="card__main">{weather.main}</h3>
-          <p className='card__wind-speed'>Wind speed {weather.wind} m/s</p>
-          <p className='card__clouds'>Clouds {weather.clouds}%</p>
-          <p className='card__pressure'>Pressure {weather.pressure} hPa</p>
-        </div>
-      </div>
-      <h2 className='card__temperature'>{temp} {toggle ? '°F' : '°C'}</h2>
-      <button onClick={() => setToggle(!toggle)}>
-        Change to {!toggle ? 'F' : 'C'}
-      </button>
+      {loading ? (
+        <div className="loading-screen">Loading...</div> // Pantalla de carga
+      ) : (
+        <>
+          <h1 className='card__title'>Weather App</h1>
+          <h2 className='card__subtitle'>
+            {weather.city}, {weather.country}
+          </h2>
+          <div className='card__body'>
+            <img src={weather.icon} alt={weather.main} width={100} />
+            <div className="card__info">
+              <h3 className="card__main">{weather.main}</h3>
+              <p className='card__wind-speed'>Wind speed {weather.wind} m/s</p>
+              <p className='card__clouds'>Clouds {weather.clouds}%</p>
+              <p className='card__pressure'>Pressure {weather.pressure} hPa</p>
+            </div>
+          </div>
+          <h2 className='card__temperature'>{temp} {toggle ? '°F' : '°C'}</h2>
+          <button onClick={() => setToggle(!toggle)}>
+            Change to {!toggle ? 'F' : 'C'}
+          </button>
+        </>
+      )}
     </div>
   )
 }
 
 export default App
+
