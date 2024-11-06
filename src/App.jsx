@@ -1,24 +1,17 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
-  thunderstormSvg,
-  drizzleSvg,
-  rainSvg,
-  snowSvg,
-  atmosphereSvg,
-  clearSvg,
-  cloudSvg
-} from './assets'
-import './App.css'
+  thunderstormSvg, drizzleSvg, rainSvg, snowSvg, atmosphereSvg, clearSvg, cloudSvg
+} from './assets';
+import './App.css';
 
-const Key = '4d44aa24f9bf3e8b19319b85978d7ef2'
-const url = 'https://api.openweathermap.org/data/2.5/weather'
+const Key = '4d44aa24f9bf3e8b19319b85978d7ef2';
+const url = 'https://api.openweathermap.org/data/2.5/weather';
 
 const initialState = {
   latitude: 0,
   longitude: 0
-}
+};
 
 const conditionCodes = {
   thunderstorm: [200, 201, 202, 210, 211, 212, 221, 230, 231, 232],
@@ -28,74 +21,92 @@ const conditionCodes = {
   atmosphere: [701, 711, 721, 731, 741, 751, 761, 762, 771, 781],
   clear: [800],
   clouds: [801, 802, 803, 804]
-}
+};
 
 const icons = {
-  thunderstorm: thunderstormSvg,
-  drizzle: drizzleSvg,
-  rain: rainSvg,
-  snow: snowSvg,
-  atmosphere: atmosphereSvg,
-  clear: clearSvg,
-  clouds: cloudSvg
-}
+  thunderstorm: thunderstormSvg, drizzle: drizzleSvg, rain: rainSvg, snow: snowSvg,
+  atmosphere: atmosphereSvg, clear: clearSvg, clouds: cloudSvg
+};
 
 function App() {
-  const [coords, setCoords] = useState(initialState)
-  const [weather, setWeather] = useState({})
-  const [toggle, setToggle] = useState(false)
-  const [loading, setLoading] = useState(true) // Estado de carga
+  const [coords, setCoords] = useState(initialState);
+  const [weather, setWeather] = useState({});
+  const [toggle, setToggle] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [city, setCity] = useState('');  // Estado para almacenar el nombre de la ciudad
+  const [searchCity, setSearchCity] = useState('');  // Estado para almacenar la ciudad a buscar
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const { latitude, longitude } = position.coords
-        setCoords({ latitude, longitude })
+        const { latitude, longitude } = position.coords;
+        setCoords({ latitude, longitude });
       },
       () => {
-        console.log('No aceptas la ubicación')
+        console.log('No aceptas la ubicación');
       }
-    )
-  }, [])
+    );
+  }, []);
 
   useEffect(() => {
-    if (coords.latitude !== 0 && coords.longitude !== 0) {
-      axios.get(`${url}?lat=${coords.latitude}&lon=${coords.longitude}&appid=${Key}`)
-        .then((res) => {
-          const keys = Object.keys(conditionCodes)
-          const iconName = keys.find((key) => conditionCodes[key].includes(res.data.weather[0].id))
+    const fetchWeather = async () => {
+      try {
+        const query = searchCity
+          ? `${url}?q=${searchCity}&appid=${Key}`
+          : `${url}?lat=${coords.latitude}&lon=${coords.longitude}&appid=${Key}`;
+          
+        const res = await axios.get(query);
+        const keys = Object.keys(conditionCodes);
+        const iconName = keys.find((key) => conditionCodes[key].includes(res.data.weather[0].id));
 
-          setWeather({
-            city: res.data.name,
-            country: res.data.sys.country,
-            icon: icons[iconName],
-            main: res.data.weather[0].main,
-            wind: res.data.wind.speed,
-            clouds: res.data.clouds.all,
-            pressure: res.data.main.pressure,
-            temperature: parseInt(res.data.main.temp - 273.15)
-          })
-          setLoading(false) // Desactivar pantalla de carga una vez que los datos estén disponibles
-        })
-        .catch((err) => {
-          console.log(err)
-          setLoading(false) // Asegurarse de desactivar la carga en caso de error
-        })
+        setWeather({
+          city: res.data.name,
+          country: res.data.sys.country,
+          icon: icons[iconName],
+          main: res.data.weather[0].main,
+          wind: res.data.wind.speed,
+          clouds: res.data.clouds.all,
+          pressure: res.data.main.pressure,
+          temperature: parseInt(res.data.main.temp - 273.15)
+        });
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    };
+    
+    if ((coords.latitude !== 0 && coords.longitude !== 0) || searchCity) {
+      fetchWeather();
     }
-  }, [coords])
+  }, [coords, searchCity]);
 
-  const temp = !toggle ? parseInt(weather.temperature * 9/5 + 32) : weather.temperature
+  const handleSearch = () => {
+    setSearchCity(city);  // Actualizar la ciudad a buscar
+    setLoading(true);
+  };
+
+  const temp = !toggle ? parseInt(weather.temperature * 9 / 5 + 32) : weather.temperature;
 
   return (
     <div className='card'>
       {loading ? (
-        <div className="loading-screen">Loading...</div> // Pantalla de carga
+        <div className="loading-screen">Loading...</div>
       ) : (
         <>
           <h1 className='card__title'>Weather App</h1>
-          <h2 className='card__subtitle'>
-            {weather.city}, {weather.country}
-          </h2>
+          <div>
+            <input 
+              type="text" 
+              placeholder="Enter city name" 
+              value={city} 
+              onChange={(e) => setCity(e.target.value)} 
+               className="city-input"
+            />
+            <button onClick={handleSearch} className="search-button">Search</button> 
+            </div>
+          
+          <h2 className='card__subtitle'>{weather.city}, {weather.country}</h2>
           <div className='card__body'>
             <img src={weather.icon} alt={weather.main} width={100} />
             <div className="card__info">
@@ -112,8 +123,9 @@ function App() {
         </>
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+
 

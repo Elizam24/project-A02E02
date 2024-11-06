@@ -20,7 +20,7 @@
   transition: box-shadow 0.25s;
 }
 .card:hover {
-  box-shadow: 0 0 25px 0 #3089bc4a;
+  box-shadow: 0 0 25px 0 #25ac6f4a;
 }
 .card__title,
 .card__subtitle {
@@ -69,5 +69,28 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+/* Estilos para el contenedor de búsqueda */
+
+.city-input {
+  width: 60%;             /* Anchura del campo de entrada */
+  padding: 10px;           /* Espaciado interno */
+  margin-right: 10px;      /* Separación entre el campo y el botón */
+  border: 1px solid #051201;  /* Borde del input */
+  border-radius: 5px;      
+  font-size: 16px;         /* Tamaño de fuente */
+}
+
+.search-button {
+  padding: 10px 15px;          /* Tamaño del botón */
+  background-color: #4c9daf;   /* Color de fondo (verde) */
+  color: white;                /* Color del texto */
+  border: none;                /* Sin borde */
+  border-radius: 5px;          /* Bordes redondeados */
+  font-size: 16px;             /* Tamaño de la fuente */
+  cursor: pointer;             /* Cambia el cursor al pasar sobre el botón */
+  transition: background-color 0.3s;  /* Suaviza la transición de color */
+}
+
+
 
 
