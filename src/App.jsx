@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
-  thunderstormSvg, drizzleSvg, rainSvg, snowSvg, atmosphereSvg, clearSvg, cloudSvg
+  thunderstormSvg, drizzleSvg, rainSvg, snowSvg, atmosphereSvg, clearSvg, cloudSvg,
+  thunderstormBg, drizzleBg, rainBg, snowBg, atmosphereBg, clearBg, cloudBg
 } from './assets';
 import './App.css';
 
@@ -26,6 +27,11 @@ const conditionCodes = {
 const icons = {
   thunderstorm: thunderstormSvg, drizzle: drizzleSvg, rain: rainSvg, snow: snowSvg,
   atmosphere: atmosphereSvg, clear: clearSvg, clouds: cloudSvg
+};
+
+const backgrounds = {
+  thunderstorm: thunderstormBg, drizzle: drizzleBg, rain: rainBg, snow: snowBg,
+  atmosphere: atmosphereBg, clear: clearBg, clouds: cloudBg
 };
 
 function App() {
@@ -67,7 +73,8 @@ function App() {
           wind: res.data.wind.speed,
           clouds: res.data.clouds.all,
           pressure: res.data.main.pressure,
-          temperature: parseInt(res.data.main.temp - 273.15)
+          temperature: parseInt(res.data.main.temp - 273.15),
+          background: backgrounds[iconName]  // Asigna el fondo según el clima
         });
         setLoading(false);
       } catch (err) {
@@ -89,7 +96,10 @@ function App() {
   const temp = !toggle ? parseInt(weather.temperature * 9 / 5 + 32) : weather.temperature;
 
   return (
-    <div className='card'>
+    <div 
+      className='card' 
+      style={{ backgroundImage: `url(${weather.background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
       {loading ? (
         <div className="loading-screen">Loading...</div>
       ) : (
@@ -101,11 +111,9 @@ function App() {
               placeholder="Enter city name" 
               value={city} 
               onChange={(e) => setCity(e.target.value)} 
-               className="city-input"
             />
-            <button onClick={handleSearch} className="search-button">Search</button> 
-            </div>
-          
+            <button onClick={handleSearch}>Search</button>
+          </div>
           <h2 className='card__subtitle'>{weather.city}, {weather.country}</h2>
           <div className='card__body'>
             <img src={weather.icon} alt={weather.main} width={100} />
@@ -127,5 +135,3 @@ function App() {
 }
 
 export default App;
-
-
