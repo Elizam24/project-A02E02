@@ -2,9 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   thunderstormSvg, drizzleSvg, rainSvg, snowSvg, atmosphereSvg, clearSvg, cloudSvg,
-  thunderstormBg, drizzleBg, rainBg, snowBg, atmosphereBg, clearBg, cloudBg
-} from './assets';
+  } from './assets';
 import './App.css';
+import thunderstormBg from './assets/imagen/thunderstormBg.jpg';
+import drizzleBg from './assets/imagen/drizzleBg.jpg';
+import cloudBg from './assets/imagen/cloudBg.jpg';
+import atmosphereBg from './assets/imagen/atmosphere.jpg';
+import snowBg from './assets/imagen/snowBg.jpg';
+import clearBg from './assets/imagen/clearBg.jpg';
 
 const Key = '4d44aa24f9bf3e8b19319b85978d7ef2';
 const url = 'https://api.openweathermap.org/data/2.5/weather';
