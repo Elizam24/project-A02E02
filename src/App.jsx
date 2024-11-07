@@ -4,12 +4,13 @@ import {
   thunderstormSvg, drizzleSvg, rainSvg, snowSvg, atmosphereSvg, clearSvg, cloudSvg,
   } from './assets';
 import './App.css';
-import thunderstormBg from './assets/imagen/thunderstormBg.jpg';
-import drizzleBg from './assets/imagen/drizzleBg.jpg';
-import cloudBg from './assets/imagen/cloudBg.jpg';
-import atmosphereBg from './assets/imagen/atmosphere.jpg';
-import snowBg from './assets/imagen/snowBg.jpg';
-import clearBg from './assets/imagen/clearBg.jpg';
+
+//import thunderstormBg from './assets/imagen/thunderstormBg.jpg';
+//import drizzleBg from './assets/imagen/drizzleBg.jpg';
+//import rainBg from './assets/imagen/rainBg.jpg';
+//import atmosphereBg from './assets/imagen/atmosphereBg.jpg';
+//import clearBg from './assets/imagen/clearBg.jpg';
+//import cloudBg from './assets/imagen/cloudBg.jpg';
 
 const Key = '4d44aa24f9bf3e8b19319b85978d7ef2';
 const url = 'https://api.openweathermap.org/data/2.5/weather';
@@ -34,10 +35,10 @@ const icons = {
   atmosphere: atmosphereSvg, clear: clearSvg, clouds: cloudSvg
 };
 
-const backgrounds = {
-  thunderstorm: thunderstormBg, drizzle: drizzleBg, rain: rainBg, snow: snowBg,
-  atmosphere: atmosphereBg, clear: clearBg, clouds: cloudBg
-};
+//const backgrounds = {
+ // thunderstorm: thunderstormBg, drizzle: drizzleBg, rain: rainBg, snow: snowBg,
+  //atmosphere: atmosphereBg, clear: clearBg, clouds: cloudBg
+//};//
 
 function App() {
   const [coords, setCoords] = useState(initialState);
@@ -79,7 +80,7 @@ function App() {
           clouds: res.data.clouds.all,
           pressure: res.data.main.pressure,
           temperature: parseInt(res.data.main.temp - 273.15),
-          background: backgrounds[iconName]  // Asigna el fondo según el clima
+          //background: backgrounds[iconName]  // Asigna el fondo según el clima
         });
         setLoading(false);
       } catch (err) {
